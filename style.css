@@ -1,0 +1,20 @@
+<?php
+require_once 'connection.php';
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $title = mysqli_real_escape_string($conn, $_POST['title']);
+    $description = mysqli_real_escape_string($conn, $_POST['description']);
+    $posted_by = mysqli_real_escape_string($conn, $_POST['posted_by']);
+
+    $sql = "INSERT INTO activities (title, description, posted_by) VALUES (?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "sss", $title, $description, $posted_by);
+
+    if (mysqli_stmt_execute($stmt)) {
+        header("Location: index.php");
+        exit();
+    } else {
+        echo "Error: " . mysqli_error($conn);
+    }
+}
+?>
